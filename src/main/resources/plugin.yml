@@ -1,0 +1,14 @@
+name: etexCore
+version: '${project.version}'
+main: ur.anusdestroyer.etexcoreplugin.etexCorePlugin
+api-version: 1.20
+load: STARTUP
+authors: [ Kchulka ]
+description: Main plugin needed for every etex plugin.
+commands:
+  etexCorePlugin:
+    description: Main command
+    usage: /<command> [stash|mail|admin|reload]
+    aliases:
+      - e
+      - ecp

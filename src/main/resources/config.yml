@@ -1,0 +1,31 @@
+
+database:
+  ip: 127.0.0.1
+  port: 3306
+  username: kokot
+  password: "kokot"
+  databaseName: "kokot"
+  maxPoolSize: 10
+
+enabled-features:
+  stash: true
+
+
+  mail: false
+  essentials: false
+  advancements: false
+
+
+stash-settings:
+  gui-template: "test"
+
+mail-settings:
+  foo: "bar"
+
+currencies:
+  list:
+    blue_essence: "MMOITEM:MATERIAL:KOKOT:1"
+    green_essence: "MMOITEM:MATERIAL:KOKOT:1"
+    pink_essence: "MMOITEM:MATERIAL:KOKOT:1"
+
+
