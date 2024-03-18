@@ -1,10 +1,9 @@
-package ur.anusdestroyer.etexcoreplugin.database;
+package ur.anusdestroyer.etexcoreplugin.backend;
 
 import com.zaxxer.hikari.HikariConfig;
 import com.zaxxer.hikari.HikariDataSource;
 import org.bukkit.Bukkit;
 import org.bukkit.configuration.file.YamlConfiguration;
-import ur.anusdestroyer.etexcoreplugin.backend.ConfigFiles;
 import ur.anusdestroyer.etexcoreplugin.etexCorePlugin;
 
 import java.sql.Connection;
@@ -14,35 +13,44 @@ import java.sql.SQLException;
 public class DbManager {
     private HikariDataSource dataSource;
 
-    private YamlConfiguration config = ConfigFiles.getConfig();
+    private final YamlConfiguration config = ConfigFiles.getConfig();
 
     private final etexCorePlugin instance;
 
     public DbManager(etexCorePlugin instance) {
         this.instance = instance;
-    }
-
-    public void DatabaseManager() {
-        initializeDataSource();
+        initializeDataSource(); // Ensure the data source is initialized here
     }
 
     private void initializeDataSource() {
         HikariConfig hikariConfig = new HikariConfig();
 
-        String ip = config.getString("database.mysql.ip");
-        int port = config.getInt("database.mysql.port");
-        String databaseName = config.getString("database.mysql.databaseName");
+        String ip = config.getString("database.ip");
+        int port = config.getInt("database.port");
+        String databaseName = config.getString("database.databaseName");
+
+        // Ensure you're handling potential null values from the configuration
+        if (ip == null || databaseName == null ) {
+            Bukkit.getLogger().severe("Database configuration is missing. Please check your config file.");
+            return;
+        }
 
         hikariConfig.setJdbcUrl("jdbc:mysql://" + ip + ":" + port + "/" + databaseName);
-        hikariConfig.setUsername(config.getString("database.mysql.username"));
-        hikariConfig.setPassword(config.getString("database.mysql.password"));
-        hikariConfig.setMaximumPoolSize(config.getInt("database.mysql.maxPoolSize"));
+        hikariConfig.setUsername(config.getString("database.username"));
+        hikariConfig.setPassword(config.getString("database.password"));
+        // Make sure to provide a default value in case the configuration does not specify one
+        hikariConfig.setMaximumPoolSize(config.getInt("database.maxPoolSize", 10));
 
         hikariConfig.addDataSourceProperty("cachePrepStmts", "true");
         hikariConfig.addDataSourceProperty("prepStmtCacheSize", "250");
         hikariConfig.addDataSourceProperty("prepStmtCacheSqlLimit", "2048");
 
-        dataSource = new HikariDataSource(hikariConfig);
+        try {
+            dataSource = new HikariDataSource(hikariConfig);
+        } catch (Exception e) {
+            Bukkit.getLogger().severe("Failed to initialize data source: " + e.getMessage());
+            e.printStackTrace();
+        }
     }
 
     public void initializeDatabase() {
@@ -77,9 +85,7 @@ public class DbManager {
         }
     }
 
-    public void testdb() {
-        // You can add a method for testing database connections or running sample queries
-    }
+
 
     public void closeDataSource() {
         if (dataSource != null) {

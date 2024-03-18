@@ -24,6 +24,7 @@ public class MainCommand implements TabExecutor {
         return true;
     }
 
+
     @Override
     public @Nullable List<String> onTabComplete(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, @NotNull String[] args) {
         return null;

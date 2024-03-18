@@ -6,9 +6,9 @@ load: STARTUP
 authors: [ Kchulka ]
 description: Main plugin needed for every etex plugin.
 commands:
-  etexCorePlugin:
-    description: Main command
-    usage: /<command> [stash|mail|admin|reload]
-    aliases:
-      - e
-      - ecp
+#  etexCorePlugin:
+#    description: Main command
+#    usage: /<command> [stash|mail|admin|reload]
+#    aliases:
+#      - e
+#      - ecp
