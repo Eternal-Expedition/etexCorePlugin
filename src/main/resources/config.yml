@@ -1,31 +1,65 @@
 
+# Database connection is required for now!
+# Any other etex plugin that needs a database will use this
 database:
   ip: 127.0.0.1
   port: 3306
-  username: kokot
-  password: "kokot"
-  databaseName: "kokot"
+  username: "Uranus"
+  password: "this-is-a-secret"
+  databaseName: "etex"
   maxPoolSize: 10
 
-enabled-features:
-  stash: true
 
 
-  mail: false
-  essentials: false
-  advancements: false
+
+# Stash - if player should receive an item, but has a ful inventory, the item is placed into the stash from where he can claim it later
+# only works for items that are given from other etex plugins or via the /TODO:<insert command name here> give
+stash:
+  enabled: true
+
+# Mail - used for server to send messages & gifts to players and for players to send messages & gifts to each other
+mail:
+  enabled: true
+  gui-template: "mail"
 
 
-stash-settings:
-  gui-template: "test"
-
-mail-settings:
-  foo: "bar"
-
-currencies:
-  list:
+# Currencies - used by other etex plugins if you want, but its not necessary. This uses items as currency.
+# Bank - used for storing items
+# since these to features only work with each other, you can enable both or none
+currencies-bank:
+  enabled: false
+  currency-list:
     blue_essence: "MMOITEM:MATERIAL:KOKOT:1"
     green_essence: "MMOITEM:MATERIAL:KOKOT:1"
     pink_essence: "MMOITEM:MATERIAL:KOKOT:1"
 
+  bank: # TODO make it mayble more configurable
+    gui-template: "bank"
+    atm-gui-template: "atm"
+    credit-card: "MMOITEM:MATERIAL:KOKOT:1"
 
+
+# Essentials - I dont want to use essentials on my server since they have too many features that I will never use,
+#              but I want some shortcuts & simple commands. You can enable some if you want.
+essentials:
+  tpa: true
+  back: true
+  seen: true
+  gm: true
+  speed: true
+  god: true
+  top: true
+  time: true
+  warp: true
+  killall: true
+  sudo: true
+  broadcast-single-server: true
+
+# TODO ideas that might me implemented:
+# Lootboxes (non p2w, just for mob loot)
+# Auction house for banks
+# Moderation tools
+# Party & friends system
+#
+#
+#

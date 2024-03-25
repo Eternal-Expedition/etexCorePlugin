@@ -1,5 +1,7 @@
 package ur.anusdestroyer.etexcoreplugin;
 
+
+import de.tr7zw.changeme.nbtapi.NBTContainer;
 import dev.jorel.commandapi.CommandAPI;
 import dev.jorel.commandapi.CommandAPIBukkitConfig;
 import dev.jorel.commandapi.CommandAPICommand;
@@ -17,7 +19,15 @@ public final class etexCorePlugin extends JavaPlugin {
 
     @Override
     public void onLoad() {
-        CommandAPI.onLoad(new CommandAPIBukkitConfig(this).verboseOutput(true));
+
+        // config files
+        ConfigFiles.load(instance);
+        getLogger().info("Config files have been loaded");
+
+
+        // command api load
+        CommandAPI.onLoad(new CommandAPIBukkitConfig(this).verboseOutput(true).initializeNBTAPI(NBTContainer.class, NBTContainer::new ));
+
 
         new CommandAPICommand("broadcastmsg")
                 .withArguments(new GreedyStringArgument("message")) // The arguments
@@ -39,10 +49,6 @@ public final class etexCorePlugin extends JavaPlugin {
 
         // Assign the instance before using it
         instance = this;
-
-        // config files
-        ConfigFiles.load(instance);
-        getLogger().info("Config files have been loaded");
 
         // Now initialize the database manager
         database = new DbManager(instance);

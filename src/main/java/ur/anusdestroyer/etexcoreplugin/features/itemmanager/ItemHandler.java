@@ -20,13 +20,11 @@ import java.util.List;
 public class ItemHandler {
 
     /*
+    String types:
 
-    # String types:
-#
-#               ITEM:TYPE:CATEGORY:ID:COUNT                                  // input & output
-#               PLACEHOLDER:DESCRIPTION:VALUE:OPERATION:COMPAREtoVALUE       // input
-#               COMMAND:PLAYER:DESCRIPTION:COMMAND                           // output
-
+           ITEM:TYPE:CATEGORY:ID:COUNT                                  // input & output
+           PLACEHOLDER:DESCRIPTION:VALUE:OPERATION:COMPAREtoVALUE       // input
+           COMMAND:PLAYER:DESCRIPTION:COMMAND                           // output
 
      */
 
@@ -270,11 +268,5 @@ public class ItemHandler {
         player.getInventory().addItem(item);
     }
 
-
-    // TODO: Make an object or delete this function
-    /* public static void giveItem (etexItem item) {
-        Bukkit.getPlayer(item.getPlayerUUID()).getInventory().addItem(item.getItemStack());
-    }
-    */
 
 }

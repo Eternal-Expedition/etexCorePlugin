@@ -85,7 +85,7 @@ public class DbManager {
         }
     }
 
-
+    public Connection getConnection() { try { return dataSource.getConnection();} catch (SQLException e) {e.printStackTrace();} return null; }
 
     public void closeDataSource() {
         if (dataSource != null) {
