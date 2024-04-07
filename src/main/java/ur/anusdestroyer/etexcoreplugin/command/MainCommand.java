@@ -1,13 +1,20 @@
 package ur.anusdestroyer.etexcoreplugin.command;
 
-import ur.anusdestroyer.etexcoreplugin.etexCorePlugin;
+
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.TabExecutor;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import ur.anusdestroyer.etexcoreplugin.backend.MessageUtils;
+import ur.anusdestroyer.etexcoreplugin.etexCorePlugin;
 
 import java.util.List;
+
+import static org.bukkit.Bukkit.getLogger;
+
+
+
+
+
 
 public class MainCommand implements TabExecutor {
 
@@ -17,19 +24,45 @@ public class MainCommand implements TabExecutor {
         this.instance = instance;
     }
 
+
     @Override
-    public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, @NotNull String[] args) {
+    public boolean onCommand(CommandSender commandSender, Command command, String s, String[] args) {
+        if (args.length < 1) {
+            commandSender.sendMessage(MessageUtils.str("&7kokot"));
+            return false;
+        }
+        switch (args[0].toLowerCase()) {
+            case "stash":
+                if (args.length == 1) {
+                    commandSender.sendMessage(MessageUtils.str("&7[claim]"));
+                    return false;
+                }
 
 
-        return true;
+            case "mail":
+
+
+
+            case "admin":
+
+
+
+        }
+
+
+        return false;
     }
 
-
     @Override
-    public @Nullable List<String> onTabComplete(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, @NotNull String[] args) {
+    public List<String> onTabComplete(CommandSender commandSender, Command command, String s, String[] strings) {
         return null;
     }
-
-
-
 }
+
+
+ /*
+
+
+
+
+ */

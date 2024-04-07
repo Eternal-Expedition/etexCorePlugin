@@ -11,18 +11,12 @@ import java.sql.PreparedStatement;
 import java.sql.SQLException;
 
 public class DbManager {
-    private HikariDataSource dataSource;
+    private static HikariDataSource dataSource;
 
-    private final YamlConfiguration config = ConfigFiles.getConfig();
+    private static final YamlConfiguration config = ConfigFiles.getConfig();
 
-    private final etexCorePlugin instance;
+    private static void initializeDataSource() {
 
-    public DbManager(etexCorePlugin instance) {
-        this.instance = instance;
-        initializeDataSource(); // Ensure the data source is initialized here
-    }
-
-    private void initializeDataSource() {
         HikariConfig hikariConfig = new HikariConfig();
 
         String ip = config.getString("database.ip");
@@ -53,8 +47,12 @@ public class DbManager {
         }
     }
 
-    public void initializeDatabase() {
+    public static void initializeDatabase(etexCorePlugin instance) {
+
         Bukkit.getScheduler().runTaskAsynchronously(instance, () -> {
+
+            initializeDataSource();
+
             createStashTable();
             createMailTable();
             // Add more initialization methods for other tables as needed
@@ -63,9 +61,9 @@ public class DbManager {
         });
     }
 
-    private void createStashTable() {
+    private static void createStashTable() {
         try (Connection connection = dataSource.getConnection()) {
-            String query = "CREATE TABLE IF NOT EXISTS stash (id INT PRIMARY KEY AUTO_INCREMENT, uuid VARCHAR(36), item_stack TEXT, timestamp TIMESTAMP)";
+            String query = "CREATE TABLE IF NOT EXISTS etex_core_stash (id INT PRIMARY KEY AUTO_INCREMENT, uuid VARCHAR(36), item_stack TEXT, timestamp TIMESTAMP)";
             try (PreparedStatement preparedStatement = connection.prepareStatement(query)) {
                 preparedStatement.executeUpdate();
             }
@@ -74,9 +72,9 @@ public class DbManager {
         }
     }
 
-    private void createMailTable() {
+    private static void createMailTable() {
         try (Connection connection = dataSource.getConnection()) {
-            String query = "CREATE TABLE IF NOT EXISTS mail (id INT PRIMARY KEY AUTO_INCREMENT, uuid VARCHAR(36), item_stack TEXT, timestamp TIMESTAMP, message TEXT, player_name VARCHAR(255))";
+            String query = "CREATE TABLE IF NOT EXISTS etex_core_mail (id INT PRIMARY KEY AUTO_INCREMENT, uuid VARCHAR(36), item_stack TEXT, timestamp TIMESTAMP, message TEXT, player_name VARCHAR(255))";
             try (PreparedStatement preparedStatement = connection.prepareStatement(query)) {
                 preparedStatement.executeUpdate();
             }
@@ -85,7 +83,14 @@ public class DbManager {
         }
     }
 
-    public Connection getConnection() { try { return dataSource.getConnection();} catch (SQLException e) {e.printStackTrace();} return null; }
+    public static Connection getConnection() {
+        try {
+            return dataSource.getConnection();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
 
     public void closeDataSource() {
         if (dataSource != null) {
