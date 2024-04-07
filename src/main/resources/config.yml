@@ -16,6 +16,8 @@ database:
 # only works for items that are given from other etex plugins or via the /TODO:<insert command name here> give
 stash:
   enabled: true
+  # How long should the plugin store the item in days
+  delete-time: 10
 
 # Mail - used for server to send messages & gifts to players and for players to send messages & gifts to each other
 mail:

@@ -4,16 +4,25 @@ import com.zaxxer.hikari.HikariConfig;
 import com.zaxxer.hikari.HikariDataSource;
 import org.bukkit.Bukkit;
 import org.bukkit.configuration.file.YamlConfiguration;
+import org.bukkit.scheduler.BukkitScheduler;
 import ur.anusdestroyer.etexcoreplugin.etexCorePlugin;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 
+import static org.bukkit.Bukkit.getServer;
+
 public class DbManager {
     private static HikariDataSource dataSource;
 
     private static final YamlConfiguration config = ConfigFiles.getConfig();
+
+    private static etexCorePlugin instance;
+
+    public static void setInstance(etexCorePlugin pluginInstance) {
+        instance = pluginInstance;
+    }
 
     private static void initializeDataSource() {
 
@@ -47,8 +56,7 @@ public class DbManager {
         }
     }
 
-    public static void initializeDatabase(etexCorePlugin instance) {
-
+    public static void initializeDatabase() {
         Bukkit.getScheduler().runTaskAsynchronously(instance, () -> {
 
             initializeDataSource();
@@ -63,7 +71,7 @@ public class DbManager {
 
     private static void createStashTable() {
         try (Connection connection = dataSource.getConnection()) {
-            String query = "CREATE TABLE IF NOT EXISTS etex_core_stash (id INT PRIMARY KEY AUTO_INCREMENT, uuid VARCHAR(36), item_stack TEXT, timestamp TIMESTAMP)";
+            String query = "CREATE TABLE IF NOT EXISTS etex_core_stash (id INT PRIMARY KEY AUTO_INCREMENT, uuid VARCHAR(36), item_stack BLOB, timestamp TIMESTAMP)";
             try (PreparedStatement preparedStatement = connection.prepareStatement(query)) {
                 preparedStatement.executeUpdate();
             }
@@ -74,7 +82,7 @@ public class DbManager {
 
     private static void createMailTable() {
         try (Connection connection = dataSource.getConnection()) {
-            String query = "CREATE TABLE IF NOT EXISTS etex_core_mail (id INT PRIMARY KEY AUTO_INCREMENT, uuid VARCHAR(36), item_stack TEXT, timestamp TIMESTAMP, message TEXT, player_name VARCHAR(255))";
+            String query = "CREATE TABLE IF NOT EXISTS etex_core_mail (id INT PRIMARY KEY AUTO_INCREMENT, uuid VARCHAR(36), item_stack BLOB, timestamp TIMESTAMP, message TEXT, player_name VARCHAR(255))";
             try (PreparedStatement preparedStatement = connection.prepareStatement(query)) {
                 preparedStatement.executeUpdate();
             }

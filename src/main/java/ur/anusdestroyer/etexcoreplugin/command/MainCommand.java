@@ -12,10 +12,6 @@ import java.util.List;
 import static org.bukkit.Bukkit.getLogger;
 
 
-
-
-
-
 public class MainCommand implements TabExecutor {
 
     private final etexCorePlugin instance;

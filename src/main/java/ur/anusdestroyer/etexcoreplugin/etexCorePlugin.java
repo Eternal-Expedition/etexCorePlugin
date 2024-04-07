@@ -8,13 +8,12 @@ import ur.anusdestroyer.etexcoreplugin.backend.ConfigFiles;
 import org.bukkit.plugin.java.JavaPlugin;
 import ur.anusdestroyer.etexcoreplugin.backend.DbManager;
 import ur.anusdestroyer.etexcoreplugin.command.MainCommand;
+import ur.anusdestroyer.etexcoreplugin.features.itemmanager.Stash;
 
 
 public final class etexCorePlugin extends JavaPlugin {
 
     public API api = new API();
-
-
 
     private static etexCorePlugin instance;
     public DbManager database; // Declare here but don't initialize
@@ -33,7 +32,13 @@ public final class etexCorePlugin extends JavaPlugin {
 
 
         // database initialization
-        DbManager.initializeDatabase(instance);
+        DbManager.setInstance(this);
+        DbManager.initializeDatabase();
+
+        // stash initialization
+        if(ConfigFiles.getConfig().getBoolean("stash.enabled")) {
+            Stash.setInstance(instance);
+        }
 
 
         // commands
