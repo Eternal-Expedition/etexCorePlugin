@@ -1,6 +1,7 @@
 package ur.anusdestroyer.etexcoreplugin.features.itemmanager;
 
 import org.bukkit.Bukkit;
+import org.bukkit.entity.Item;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import ur.anusdestroyer.etexcoreplugin.backend.ConfigFiles;
@@ -24,19 +25,21 @@ public class Stash {
         instance = pluginInstance;
     }
 
+
+    private static HashMap<UUID, Boolean> claiming = new HashMap<>();
+
     public static void add(Player player, ItemStack item) {
         if(isEnabled(player.getUniqueId(),item)) {
             if (player.getInventory().firstEmpty() != -1) {
                 player.getInventory().addItem(item);
-
-                // TODO: messages.yml for stash
-                player.sendMessage(MessageUtils.str("&cYour inventory is full, your items are now stored in /stash for " + ConfigFiles.getConfig().getString("stash.delete-time") + " days!"));
             } else {
                 UUID uuid = player.getUniqueId();
                 add(uuid, item);
+
+                // TODO: messages.yml for stash
+                player.sendMessage(MessageUtils.str("&cYour inventory is full, your items are now stored in /stash for " + ConfigFiles.getConfig().getString("stash.delete-time") + " days!"));
             }
         }
-
     }
 
     // This should add an item to stash db
@@ -52,8 +55,9 @@ public class Stash {
                 try (PreparedStatement preparedStatement = conn.prepareStatement(query)) {
                     preparedStatement.setString(1, String.valueOf(uuid));
                     preparedStatement.setBytes(2, serialized_item);
-                    preparedStatement.setTimestamp(3, Timestamp.valueOf(String.valueOf(System.currentTimeMillis())));
+                    preparedStatement.setLong(3, System.currentTimeMillis());
                     preparedStatement.executeUpdate();
+                    conn.close();
                 } catch (SQLException e) {
                     throw new RuntimeException(e);
                 }
@@ -75,34 +79,83 @@ public class Stash {
     }
 
     public static void claim(Player player) {
-        List<StashItem> items = getPlayerStash(player.getUniqueId());
+        UUID uuid = player.getUniqueId();
 
+        if (!claiming.containsKey(uuid)) {
+            claiming.put(uuid, true);
 
+            Bukkit.getScheduler().runTaskAsynchronously(instance, () -> {
 
+                List<StashItem> items = getPlayerStash(uuid);
+                List<Integer> claimedItemIds = new ArrayList<>();
 
+                Bukkit.getScheduler().runTask(instance, () -> {
 
+                    for (StashItem stashItem : items) {
+                        ItemStack item = ItemStack.deserializeBytes(stashItem.getItemStack());
+                        if (player.getInventory().firstEmpty() != -1) {
+                            player.getInventory().addItem(item);
+                            claimedItemIds.add(stashItem.getId());
+                        } else {
+                            break;
+                        }
+                    }
+                    Bukkit.getScheduler().runTaskAsynchronously(instance, () -> {
+                        if (!claimedItemIds.isEmpty()) {
+                            removeItemsByIds(claimedItemIds);
+                        }
+                        claiming.remove(uuid);
+                    });
+                });
+            });
+
+            // TODO: message.yml for stash
+            player.sendMessage(MessageUtils.str("&aItems Claimed"));
+
+        } else {
+            // TODO: stash message.yml if player is already claiming
+            player.sendMessage(MessageUtils.str("&cAlready claiming? (try again later or report bug)"));
+        }
     }
 
+    private static void removeItemsByIds (List<Integer> list) {
+        String placeholders = String.join(",", Collections.nCopies(list.size(), "?"));
+        String sql = "DELETE FROM etex_core_stash WHERE id IN (" + placeholders + ")";
+
+        Connection conn = DbManager.getConnection();
+        try (PreparedStatement ps = conn.prepareStatement(sql)) {
+            int index = 1;
+            for (Integer id : list) {
+                ps.setInt(index++, id);
+            }
+            ps.executeUpdate();
+            conn.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+            // Consider logging this exception or handling it more gracefully.
+        }
+    }
 
     private static List<StashItem> getPlayerStash(UUID uuid) {
 
         List<StashItem> items = new ArrayList<>();
         String query = "SELECT * FROM etex_core_stash WHERE uuid = ?";
 
-        try (Connection conn = DbManager.getConnection();
-             PreparedStatement ps = conn.prepareStatement(query)) {
+        Connection conn = DbManager.getConnection();
+        try (PreparedStatement ps = conn.prepareStatement(query)) {
 
-            ps.setString(1, uuid.toString());
-            try (ResultSet rs = ps.executeQuery()) {
-                while (rs.next()) {
-                    StashItem item = new StashItem(
-                            rs.getInt("id"),
-                            rs.getBytes("item_stack"),
-                            rs.getTimestamp("timestamp")
-                    );
-                    items.add(item);
-                }
-            }
+                ps.setString(1, uuid.toString());
+                try (ResultSet rs = ps.executeQuery()) {
+                    while (rs.next()) {
+                        StashItem item = new StashItem(
+                                rs.getInt("id"),
+                                rs.getBytes("item_stack"),
+                                rs.getLong("timestamp")
+                        );
+                        items.add(item);
+
+                    }
+            } conn.close();
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
@@ -112,11 +165,33 @@ public class Stash {
     }
 
     public static void purgeUser(UUID uuid) {
-
+        Bukkit.getScheduler().runTaskAsynchronously(instance, () -> {
+            Connection conn = DbManager.getConnection();
+            String query = "DELETE FROM etex_core_stash WHERE uuid = ?";
+            try (PreparedStatement preparedStatement = conn.prepareStatement(query)) {
+                preparedStatement.setString(1, uuid.toString());
+                preparedStatement.executeUpdate();
+                conn.close();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        });
     }
 
-    public static void purgeOldItems(Timestamp time) {
+    public static void purgeOldItems(long deleteTimeToMillis) {
+        long timeStamp = System.currentTimeMillis() - deleteTimeToMillis;
 
+        Connection conn = DbManager.getConnection();
+        String query = "DELETE FROM etex_core_stash WHERE timestamp < ?";
+
+        try (PreparedStatement preparedStatement = conn.prepareStatement(query)) {
+            preparedStatement.setLong(1, timeStamp);
+            preparedStatement.executeUpdate();
+            conn.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        instance.getLogger().info("Old stash items were purged!");
     }
 
 

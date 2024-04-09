@@ -1,13 +1,11 @@
 package ur.anusdestroyer.etexcoreplugin;
 
-import org.bukkit.Bukkit;
-import org.bukkit.plugin.ServicePriority;
-import org.checkerframework.checker.units.qual.A;
 import ur.anusdestroyer.etexcoreplugin.api.API;
 import ur.anusdestroyer.etexcoreplugin.backend.ConfigFiles;
 import org.bukkit.plugin.java.JavaPlugin;
 import ur.anusdestroyer.etexcoreplugin.backend.DbManager;
 import ur.anusdestroyer.etexcoreplugin.command.MainCommand;
+import ur.anusdestroyer.etexcoreplugin.command.StashCommand;
 import ur.anusdestroyer.etexcoreplugin.features.itemmanager.Stash;
 
 
@@ -35,16 +33,16 @@ public final class etexCorePlugin extends JavaPlugin {
         DbManager.setInstance(this);
         DbManager.initializeDatabase();
 
+        // command
+        getCommand("etex").setExecutor(new MainCommand(instance));
+
         // stash initialization
         if(ConfigFiles.getConfig().getBoolean("stash.enabled")) {
             Stash.setInstance(instance);
+            getCommand("stash").setExecutor(new StashCommand(instance));
+            //* 24 * 60 * 60 * 1000
+            Stash.purgeOldItems(ConfigFiles.getConfig().getInt("stash.delete-time")  * 1000L);
         }
-
-
-        // commands
-        getCommand("etex").setExecutor(new MainCommand(instance));
-
-        // API
 
     }
 

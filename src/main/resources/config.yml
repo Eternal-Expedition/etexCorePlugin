@@ -7,7 +7,7 @@ database:
   username: "Uranus"
   password: "this-is-a-secret"
   databaseName: "etex"
-  maxPoolSize: 10
+  maxPoolSize: 1000
 
 
 

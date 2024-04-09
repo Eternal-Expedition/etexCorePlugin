@@ -1,7 +1,5 @@
 package ur.anusdestroyer.etexcoreplugin.features.itemmanager;
 
-import java.sql.Timestamp;
-
 public class StashItem {
 
     /*
@@ -13,9 +11,9 @@ public class StashItem {
 
     private int id;
     private byte[] itemStack;
-    private Timestamp timestamp;
+    private Long timestamp;
 
-    public StashItem(int id, byte[] itemStack, Timestamp timestamp) {
+    public StashItem(int id, byte[] itemStack, Long timestamp) {
         this.id = id;
         this.itemStack = itemStack;
         this.timestamp = timestamp;
@@ -23,5 +21,5 @@ public class StashItem {
 
     public int getId() { return id; }
     public byte[] getItemStack() { return itemStack; }
-    public Timestamp getTimestamp() { return timestamp; }
+    public Long getTimestamp() { return timestamp; }
 }

@@ -17,7 +17,7 @@ public class API {
     /*
     Just a test function
      */
-    public String ping(){ return "pong";}
+    public String ping() { return "pong";}
 
 
     /*
@@ -36,6 +36,7 @@ public class API {
     Give item stack to player directly to stash
      */
     public void stashAdd(UUID uuid, ItemStack stack) { Stash.add(uuid, stack);}
+
 
     /*
     Give item stack to player - if full inv -> add to stash
