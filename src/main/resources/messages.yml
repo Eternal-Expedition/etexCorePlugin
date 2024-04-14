@@ -1,4 +1,14 @@
 
 
 stash:
-  delete-time:
+  prefix: " <yellow><b>Stash</b> <dark_gray>>> "
+  messages:
+    delete-time: "<gray>Your items were placed inside <green>/stash<gray> for <red>%days%<gray>days!"
+    claimed-items: "<gray>Successfully claimed <green>%claimed%<gray>/<green>%in-stash% items!"
+    stash-empty: "<gray>You currently have no items in stash!"
+    claiming: "<red>Still claiming? possibly a bug! Report this to the staff team!"
+  titles:
+    inventory-full: "<red>Your inventory is full!"
+
+#!!!!!!!!!! DO NOT CHANGE THIS UNLESS YOU KNOW WHAT YOU'RE DOING !!!!!!!!!!
+config-version: 1

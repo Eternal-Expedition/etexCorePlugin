@@ -1,0 +1,10 @@
+
+title: '<black><b> Exchange office'
+
+sound-on-open: minecraft:block.note_block.chime
+inventory-type: CHEST
+rows: 3
+
+# TODO: conversion coming soon
+
+

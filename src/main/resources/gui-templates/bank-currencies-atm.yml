@@ -1,0 +1,29 @@
+
+title: '<black><b> ATM'
+
+sound-on-open: minecraft:block.note_block.chime
+inventory-type: CHEST
+rows: 3
+
+currencies:
+  slots:
+    - 3
+    - 5
+    - 8
+  lore:
+    - "<gray>Value: %etexcore_bank_formatted_{currency_name}%"
+    - ""
+
+fill-item:
+  enabled: true
+  etexString: "vl:light_gray_stained_glass_pane:1"
+
+deposit-all-button:
+  slots:
+    - 1
+    - 2
+  enabled: true
+  etexString: "vl:diamond:1"
+
+#!!!!!!!!!! DO NOT CHANGE THIS UNLESS YOU KNOW WHAT YOU'RE DOING !!!!!!!!!!
+config-version: 1

@@ -9,7 +9,29 @@ database:
   databaseName: "etex"
   maxPoolSize: 1000
 
+# etexStrings is a syntax that all etex plugins use when dealing with custom items from different plugins-
+# It is designed for trading items without relying on exact ItemStack.
+# In a trade, you always need an input (that is what you give) and output (that is what you receive)
+# Some of the methods only support input or output
+#
+#    String types:
+#      Item:          "TYPE:(CATEGORY):ID:(COUNT)"                                       // input & output
+#      Placeholder:   "PLACEHOLDER:DESCRIPTION:VALUE:OPERATION:COMPAREtoVALUE"       // input
+#      Command:       "COMMAND:PLAYER:DESCRIPTION:COMMAND"                           // output // TODO implement this
 
+# Item type:
+# currently supports unmodified vanilla items, mmo items, items adder and slimefun. If there is a plugin with api, I might add support for it when requested
+# general syntax:
+# TYPE - tell the plugin where to look for the item, from which plugin it is. At this time, you can select these: VANILLA (vl), MMOITEMS (mi), ITEMSADDER (ia), SLIMEFUN (sf)
+# CATEGORY - if the plugin has categories, you should specify it. This currently only applies for MMOITEMS and ITEMSADDER
+# ID - the id of the item, basically the name, for vanilla, this could be for example DIAMOND or DIRT
+# COUNT - number of those items, cant be higher than 64 for now (might change in the future)
+#
+# here are some examples how an etexString might look like for each plugin:
+# VANILLA:DIAMOND:4, MMOITEM:SWORD:BIG_SWORD:1, ITEMSADDER:decoration:chair:1, SLIMEFUN:
+#
+# BE VERY CAREFUL WHEN TYPING etexStrings BECAUSE THERE ARE NO FAIL-SAFES DUE TO MY LAZINESS! STRANGE BUGS MIGHT HAPPEN!!
+#
 
 
 # Stash - if player should receive an item, but has a ful inventory, the item is placed into the stash from where he can claim it later
@@ -25,23 +47,24 @@ mail:
   gui-template: "mail"
 
 
-# Currencies - used by other etex plugins if you want, but its not necessary. This uses items as currency.
+# Currencies - used by other etex plugins if you want, but it's not necessary. This uses items as currency.
 # Bank - used for storing items
 # since these to features only work with each other, you can enable both or none
 currencies-bank:
-  enabled: false
+  enabled: true
   currency-list:
-    blue_essence: "MMOITEM:MATERIAL:KOKOT:1"
-    green_essence: "MMOITEM:MATERIAL:KOKOT:1"
-    pink_essence: "MMOITEM:MATERIAL:KOKOT:1"
+    # Make sure not to add count
+    blueEssence: vl:dirt
+    greenEssence: vl:diamond
+    pinkEssence: MMOITEM:MATERIAL:KOKOT
 
-  bank: # TODO make it mayble more configurable
-    gui-template: "bank"
-    atm-gui-template: "atm"
-    credit-card: "MMOITEM:MATERIAL:KOKOT:1"
+  bank:
+    gui-template: "bank-currencies-main"
+    atm-gui-template: "bank-currencies-atm"
+    conversion-gui-template: "conversion-currencies-atm"
 
 
-# Essentials - I dont want to use essentials on my server since they have too many features that I will never use,
+# Essentials - I don't want to use essentials on my server since they have too many features that I will never use,
 #              but I want some shortcuts & simple commands. You can enable some if you want.
 essentials:
   tpa: true
@@ -58,10 +81,14 @@ essentials:
   broadcast-single-server: true
 
 # TODO ideas that might me implemented:
-# Lootboxes (non p2w, just for mob loot)
-# Auction house for banks
+# Lootboxes (non p2w, just for mob loot or cosmetics)
+# Trading system for currencies-bank
 # Moderation tools
 # Party & friends system
 #
 #
 #
+
+#!!!!!!!!!! DO NOT CHANGE THIS UNLESS YOU KNOW WHAT YOU'RE DOING !!!!!!!!!!
+config-version: 1
+

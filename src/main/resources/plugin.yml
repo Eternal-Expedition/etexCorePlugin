@@ -1,15 +1,16 @@
 name: etexCore
 version: '${project.version}'
-main: ur.anusdestroyer.etexcoreplugin.etexCorePlugin
+main: me.uranusdestroyer.etexcoreplugin.etexCorePlugin
 api-version: 1.20
 load: STARTUP
 authors: [ Kchulka ]
 description: Main plugin needed for every etex plugin.
 commands:
-  etex:
+  etexcore:
     description: Main command
     aliases:
-      - e
       - ecp
   stash:
     description: Stash command
+  atm:
+    description: Atm command
