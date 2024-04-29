@@ -6,6 +6,7 @@ import me.uranusdestroyer.etexcoreplugin.backend.DbManager;
 import me.uranusdestroyer.etexcoreplugin.etexCorePlugin;
 import me.uranusdestroyer.etexcoreplugin.features.itemmanager.ItemHandler;
 import me.uranusdestroyer.etexcoreplugin.features.itemmanager.Stash;
+import net.md_5.bungee.api.chat.hover.content.Item;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
@@ -33,7 +34,7 @@ public class Currencies {
     }
 
     public static String getCurrencyString(String currencyName) {
-        return ConfigFiles.getConfig().getString("currencies-bank.currency-list" + currencyName);
+        return ConfigFiles.getConfig().getString("currencies-bank.currency-list." + currencyName);
     }
 
     public static Set<Object> getCurrencies() {
@@ -41,23 +42,18 @@ public class Currencies {
     }
 
     public static int getValue( Player p, String currencyName ) {
-        return 0;
+        return ItemHandler.getItemCount(getCurrencyString(currencyName), p);
     }
 
     public static void addValue( Player p, String currencyName, int value ) {
-        ItemStack item = ItemHandler.itemStackFromString(currencyName);
-        List<ItemStack> list = ItemHandler.listOfItemStacks(item, value);
-        for (ItemStack stack : list) {
-            Stash.add(p, stack);
-        }
-
+        Stash.add(p.getUniqueId(), getCurrencyString(currencyName), value);
     }
 
     public static void deductValue( Player p, String currencyName, int value ) {
-        ItemHandler.hasItem(getCurrencyString(currencyName), p, true);
+        ItemHandler.hasItem(getCurrencyString(currencyName)+":"+value, p, true);
     }
 
     public static boolean hasValue(Player p, String currencyName, int value) {
-        return ItemHandler.hasItem(getCurrencyString(currencyName), p, false);
+        return ItemHandler.hasItem(getCurrencyString(currencyName)+":"+value, p, false);
     }
 }

@@ -262,9 +262,78 @@ public class ItemHandler {
                         return Integer.parseInt(firstvalue) >= Integer.parseInt(secondvalue);
                 }
                 break;
-
         } return false;
     }
+    public static int getItemCount (String item, Player player) {
+
+        String[] itemArray = item.split(":");
+
+        String arg1 = itemArray[0].toLowerCase();
+        String arg2 = (itemArray.length > 1) ? itemArray[1] : null;
+        String arg3 = (itemArray.length > 2) ? itemArray[2] : null;
+        String arg4 = (itemArray.length > 3) ? itemArray[3] : null;
+        String arg5 = (itemArray.length > 4) ? itemArray[4] : null;
+
+        int count = 0;
+        switch (arg1) {
+            case "vanilla":
+            case "vl":
+
+                for (ItemStack checkedItem : player.getInventory().getContents()) {
+                    if (checkedItem != null && checkedItem.getType().equals(Material.getMaterial(arg2.toUpperCase())) && !checkedItem.getItemMeta().hasDisplayName()) {
+
+                        count += checkedItem.getAmount();
+
+                    }
+                }
+                return count;
+
+            case "slimefun":
+            case "sf":
+
+                for (ItemStack checkedItem : player.getInventory().getContents()) {
+                    if (checkedItem == null) continue;
+                    NBTItem sfitem = new NBTItem(checkedItem);
+                    NBTCompound tag = sfitem.getCompound("PublicBukkitValues");
+                    if (tag != null && tag.getString("slimefun:slimefun_item").equals(arg2)) {
+                        count += checkedItem.getAmount();
+
+                    }
+
+                    return count;
+                }
+
+            case "itemadder":
+            case "ia":
+
+                for (ItemStack checkedItem : player.getInventory().getContents()) {
+                    if (checkedItem == null) continue;
+                    NBTItem IAitem = new NBTItem(checkedItem);
+                    NBTCompound tag = IAitem.getCompound("itemsadder");
+                    if (tag != null && tag.getString("id").equals(arg3) && tag.getString("namespace").equals(arg2)) {
+                        count += checkedItem.getAmount();
+
+                    }
+                }
+
+                return count;
+
+            case "mmoitems":
+            case "mmoitem":
+            case "mi":
+
+                for (ItemStack checkedItem : player.getInventory().getContents()) {
+                    if (checkedItem == null) continue;
+                    NBTItem MIitem = new NBTItem(checkedItem);
+                    if (MIitem.getString("MMOITEMS_ITEM_ID").equals(arg3) && MIitem.getString("MMOITEMS_ITEM_TYPE").equals(arg2)) {
+                        count += checkedItem.getAmount();
+                    }
+                }
+                return count;
+        }
+        return 0;
+    }
+
 
     public static void giveItem (String item, Player player) {
         ItemStack giveItem = itemStackFromString(item);

@@ -1,5 +1,6 @@
 package me.uranusdestroyer.etexcoreplugin.commands;
 
+import me.uranusdestroyer.etexcoreplugin.backend.MessageUtils;
 import me.uranusdestroyer.etexcoreplugin.guis.currenciesbank.Atm;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
@@ -15,10 +16,11 @@ public class ATMCommand implements TabExecutor {
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
 
         if(!(sender instanceof Player)) return false;
+        if (sender.hasPermission("etexcore.currencies-bank.atm")) {
 
-        Atm atm = new Atm();
-        atm.openAtm((Player) sender);
-
+            Atm atm = new Atm();
+            atm.openAtm((Player) sender);
+        } else sender.sendMessage(MessageUtils.legacyMinimessageString("<red> No permission."));
         return true;
     }
 

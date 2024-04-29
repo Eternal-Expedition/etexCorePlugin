@@ -5,7 +5,7 @@ import lombok.Getter;
 public class API {
 
     /*
-    Just a test function
+    Just a function to make sure API is working
      */
     public String ping() { return "pong";}
 
@@ -14,5 +14,7 @@ public class API {
     DatabaseManager databaseManager = new DatabaseManager();
     @Getter
     ItemManager itemManager = new ItemManager();
+    @Getter
+    CurrenciesBank currenciesBank = new CurrenciesBank();
 
 }

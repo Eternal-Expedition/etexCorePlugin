@@ -66,6 +66,13 @@ public class Stash {
         }
     }
 
+    public static void add(UUID uuid, String etexString, int value) {
+        List<ItemStack> items = ItemHandler.listOfItemStacks(ItemHandler.itemStackFromString(etexString), value);
+        for (ItemStack item : items) {
+            add(uuid, item);
+        }
+    }
+
 
     private static boolean isEnabled(UUID uuid, ItemStack item) {
         if (!ConfigFiles.getConfig().getBoolean("stash.enabled")) {

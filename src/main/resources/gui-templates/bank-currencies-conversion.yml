@@ -5,6 +5,6 @@ sound-on-open: minecraft:block.note_block.chime
 inventory-type: CHEST
 rows: 3
 
-# TODO: conversion coming soon
+# TODO: conversion is a concept that might be implemented in the future if needed for the server, no need for it now.
 
 

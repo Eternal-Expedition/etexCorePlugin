@@ -64,23 +64,8 @@ currencies-bank:
     conversion-gui-template: "conversion-currencies-atm"
 
 
-# Essentials - I don't want to use essentials on my server since they have too many features that I will never use,
-#              but I want some shortcuts & simple commands. You can enable some if you want.
-essentials:
-  tpa: true
-  back: true
-  seen: true
-  gm: true
-  speed: true
-  god: true
-  top: true
-  time: true
-  warp: true
-  killall: true
-  sudo: true
-  broadcast-single-server: true
 
-# TODO ideas that might me implemented:
+# TODO ideas that might me implemented into some of the etex plugins:
 # Lootboxes (non p2w, just for mob loot or cosmetics)
 # Trading system for currencies-bank
 # Moderation tools
