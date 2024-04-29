@@ -1,6 +1,6 @@
 package me.uranusdestroyer.etexcoreplugin;
 
-import me.uranusdestroyer.etexcoreplugin.Listeners.PlayerJoinListener;
+import me.uranusdestroyer.etexcoreplugin.listeners.PlayerJoinListener;
 import me.uranusdestroyer.etexcoreplugin.api.API;
 import me.uranusdestroyer.etexcoreplugin.backend.ConfigFiles;
 import me.uranusdestroyer.etexcoreplugin.backend.Placeholders;

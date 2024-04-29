@@ -1,4 +1,4 @@
-package me.uranusdestroyer.etexcoreplugin.Listeners;
+package me.uranusdestroyer.etexcoreplugin.listeners;
 
 import dev.dejvokep.boostedyaml.YamlDocument;
 import me.uranusdestroyer.etexcoreplugin.backend.ConfigFiles;
