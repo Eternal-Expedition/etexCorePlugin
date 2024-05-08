@@ -26,7 +26,6 @@ public class ConfigFiles {
     private static YamlDocument messages;
 
     private static Map<String, YamlDocument> guiTemplates = new HashMap<>();
-    private static Map<String, YamlConfiguration> tradeTemplates = new HashMap<>();
 
     public static void load(etexCorePlugin instance) {
         try {

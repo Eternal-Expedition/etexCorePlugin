@@ -1,6 +1,7 @@
 package me.uranusdestroyer.etexcoreplugin.api;
 
 import lombok.Getter;
+import me.uranusdestroyer.etexcoreplugin.backend.MessageUtils;
 
 public class API {
 
@@ -16,5 +17,8 @@ public class API {
     ItemManager itemManager = new ItemManager();
     @Getter
     CurrenciesBank currenciesBank = new CurrenciesBank();
+
+    @Getter
+    MessageUtils messageUtils = new MessageUtils();
 
 }

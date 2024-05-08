@@ -24,4 +24,9 @@ public class ItemManager {
     Get item stack from etex string
      */
     public ItemStack getItemStack(String etexString) { return ItemHandler.itemStackFromString(etexString);}
+
+    public boolean hasItem (String item, Player player, boolean remove) { return ItemHandler.hasItem(item, player, remove);}
+
+    public int getItemCount (String item, Player player) { return ItemHandler.getItemCount(item, player);}
+
 }

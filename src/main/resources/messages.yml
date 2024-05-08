@@ -10,5 +10,11 @@ stash:
   titles:
     inventory-full: "<red>Your inventory is full!"
 
+currencies-bank:
+  prefix: " Bank"
+  messages:
+    no-money: "You dont have enough!"
+
+
 #!!!!!!!!!! DO NOT CHANGE THIS UNLESS YOU KNOW WHAT YOU'RE DOING !!!!!!!!!!
 config-version: 1
